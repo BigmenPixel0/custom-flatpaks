@@ -1,0 +1,27 @@
+app-id: com.ugetdm.uGet
+runtime: org.gnome.Platform
+runtime-version: '41'
+sdk: org.gnome.Sdk
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --filesystem=xdg-download
+command: uget-gtk
+modules:
+  - ../shared-modules/intltool/intltool-0.51.json
+  
+  - name: aria2
+    sources:
+      - type: archive
+        url: https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0.tar.xz
+        sha256: 58d1e7608c12404f0229a3d9a4953d0d00c18040504498b483305bcb3de907a5
+
+  - name: uget
+    sources:
+      - type: archive
+        url: https://downloads.sourceforge.net/urlget/uget-2.2.3-1.tar.gz
+        sha256: 11356e4242151b9014fa6209c1f0360b699b72ef8ab47dbeb81cc23be7db9049
+      - type: patch
+        path: gcc10.patch
