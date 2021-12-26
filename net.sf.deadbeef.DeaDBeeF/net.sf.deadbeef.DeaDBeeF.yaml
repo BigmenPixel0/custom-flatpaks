@@ -1,0 +1,86 @@
+app-id: net.sf.deadbeef.DeaDBeeF
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm12
+
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --filesystem=xdg-music
+  - --own-name=music.deadbeef.player
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+  - /share/doc
+  - '*.a'
+  - '*.la'
+
+command: deadbeef
+modules:
+  - ../shared-modules/intltool/intltool-0.51.json
+
+  - name: libdispatch
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_TESTING=OFF
+      - -DBlocksRuntime_INCLUDE_DIR=${FLATPAK_DEST}/include
+      - -DBlocksRuntime_LIBRARIES=${FLATPAK_DEST}/lib/libBlocksRuntime.so
+    build-options:
+      prepend-path: /usr/lib/sdk/llvm12/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm12/lib
+      env:
+        CC: clang
+        CXX: clang++
+    sources:
+      - type: archive
+        url: https://github.com/apple/swift-corelibs-libdispatch/archive/swift-5.5.2-RELEASE.tar.gz
+        sha256: 2611b4dc9530207e19dae07599355622f76c32694aca3ef909149a7ecf48dfc7
+
+  - name: yasm
+    sources:
+      - type: archive
+        url: https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+        sha256: 3dce6601b495f5b3d45b59f7d2492a340ee7e84b5beca17e48f862502bd5603f
+
+  - name: jansson
+    sources:
+      - type: archive
+        url: https://github.com/akheron/jansson/releases/download/v2.14/jansson-2.14.tar.gz
+        sha256: 5798d010e41cf8d76b66236cfb2f2543c8d082181d16bc3085ab49538d4b9929
+
+  - name: libzip
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://libzip.org/download/libzip-1.8.0.tar.xz
+        sha256: f0763bda24ba947e80430be787c4b068d8b6aa6027a26a19923f0acfa3dac97e
+
+  - name: faad2
+    sources:
+      - type: archive
+        url: https://github.com/knik0/faad2/archive/2_10_0.tar.gz
+        sha256: 0c6d9636c96f95c7d736f097d418829ced8ec6dbd899cc6cc82b728480a84bfb
+
+  - name: deadbeef
+    build-options:
+      prepend-path: /usr/lib/sdk/llvm12/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm12/lib
+      env:
+        CC: clang
+        CXX: clang++
+    post-install:
+      - install -Dpm644 ${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+    sources:
+      - type: archive
+        url: https://sourceforge.net/projects/deadbeef/files/travis/linux/1.8.8/deadbeef-1.8.8.tar.bz2
+        sha256: 7bb63412f47fd471abe181baeb3b9a77919f63a932fa50051078878524d10e4c
+      - type: file
+        path: net.sf.deadbeef.DeaDBeeF.metainfo.xml

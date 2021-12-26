@@ -1,2 +1,7 @@
+# com.ugetdm.uGet
 com.ugetdm.uGet/build
 com.ugetdm.uGet/.flatpak-builder
+
+# net.sf.deadbeef.DeaDBeeF
+net.sf.deadbeef.DeaDBeeF/build
+net.sf.deadbeef.DeaDBeeF/.flatpak-builder
