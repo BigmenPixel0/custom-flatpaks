@@ -22,6 +22,8 @@ cleanup:
   - '*.a'
   - '*.la'
 
+rename-desktop-file: deadbeef.desktop
+rename-icon: deadbeef
 command: deadbeef
 modules:
   - ../shared-modules/intltool/intltool-0.51.json
